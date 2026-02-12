@@ -13,7 +13,7 @@ export default function UploadPanel({ onUploaded }) {
     try {
       await onUploaded(file);
     } catch (e) {
-      setError("Ã‰chec de lâ€™envoi. RÃ©essaie.");
+      setError("Échec de l’envoi. Réessaie.");
     } finally {
       setBusy(false);
     }
@@ -43,21 +43,19 @@ export default function UploadPanel({ onUploaded }) {
       }}
     >
       <div className="zone-inner">
-        <p className="eyebrow">Fichier audio ou vidÃ©o</p>
-        <h2>DÃ©pose ici ou choisis un fichier</h2>
-        <p className="hint">
-          Formats .mp3 .wav .mp4 .mov Â· Max ajustÃ© cÃ´tÃ© serveur
-        </p>
+        <p className="eyebrow">Audio · Image · PDF · Vidéo</p>
+        <h2>Dépose ici ou choisis un fichier</h2>
+        <p className="hint">Routage auto vers le bon préfixe S3</p>
         <label className="btn">
           <input
             type="file"
-            accept="audio/*,video/*"
+            accept="audio/*,video/*,image/*,application/pdf"
             onChange={(e) => handleFiles(e.target.files)}
             hidden
           />
           Choisir un fichier
         </label>
-        {busy && <p className="status">Envoi en coursâ€¦</p>}
+        {busy && <p className="status">Envoi en cours…</p>}
         {error && <p className="status error">{error}</p>}
       </div>
     </div>

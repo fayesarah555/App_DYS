@@ -2,7 +2,7 @@ export default function SummaryList({ items }) {
   if (!items.length)
     return (
       <p className="placeholder">
-        Les r√©sum√©s appara√Ætront ici apr√®s traitement.
+        Les fichiers transfÈrÈs apparaÓtront ici avec leur URI S3.
       </p>
     );
 
@@ -10,7 +10,7 @@ export default function SummaryList({ items }) {
     <div className="summary-grid">
       {items.map((item) => (
         <article key={item.id} className="card">
-          <p className="eyebrow">R√©sum√©</p>
+          <p className="eyebrow">Fichier envoyÈ</p>
           <h3>{item.title}</h3>
           <p className="body">{item.text}</p>
         </article>

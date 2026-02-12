@@ -1,18 +1,29 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import UploadPanel from "./components/UploadPanel";
 import SummaryList from "./components/SummaryList";
 import "./styles.css";
 
 function App() {
-  const [summaries, setSummaries] = useState([]);
+  const [uploads, setUploads] = useState([]);
+  const API_BASE ="http://localhost:4000" || "";
 
   const handleUploaded = async (file) => {
     const form = new FormData();
     form.append("file", file);
-    const res = await fetch("/api/summarize", { method: "POST", body: form });
-    const data = await res.json(); // attendu: { id, title?, summary }
-    setSummaries((prev) => [
-      { id: data.id, title: data.title || file.name, text: data.summary },
+
+    const res = await fetch(`${API_BASE}/upload`, { method: "POST", body: form });
+    if (!res.ok) {
+      const msg = await res.text();
+      throw new Error(msg || "Upload échoué");
+    }
+    const data = await res.json(); // { category, s3Uri, s3Key }
+
+    setUploads((prev) => [
+      {
+        id: crypto.randomUUID(),
+        title: file.name,
+        text: `${data.category.toUpperCase()} → ${data.s3Uri}`,
+      },
       ...prev,
     ]);
   };
@@ -22,9 +33,10 @@ function App() {
       <header className="topbar">
         <div>
           <p className="eyebrow">App DYS</p>
-          <h1>Upload & Résumé</h1>
+          <h1>Upload vers S3</h1>
           <p className="lede">
-            Audio ou vidéo → résumé clair, pensé pour les troubles DYS.
+            Audio, image, PDF ou vidéo déposés ici sont routés vers le bon
+            préfixe S3.
           </p>
         </div>
       </header>
@@ -34,7 +46,7 @@ function App() {
       </section>
 
       <section className="panel">
-        <SummaryList items={summaries} />
+        <SummaryList items={uploads} />
       </section>
     </main>
   );
